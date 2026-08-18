@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda Deportiva SV. — Catálogo</title>
+<meta name="description" content="Catálogo de camisetas de fútbol Tienda Deportiva SV. Selecciones, clubes, retro, actuales, hoodies, chaquetas y conjuntos de entrenamiento.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0a0a0a;
+    --near-black:#141414;
+    --line:#2b2b2b;
+    --grey:#8f8f8f;
+    --grey-light:#c9c9c9;
+    --white:#ffffff;
+    --card-bg:#1c1c1c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--black); color:var(--white); font-family:'Montserrat', Arial, sans-serif; -webkit-font-smoothing:antialiased;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1240px; margin:0 auto; padding:0 24px;}
+
+  .announce{background:var(--white); color:var(--black); text-align:center; padding:9px 16px; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase;}
+
+  /* Header */
+  header{position:sticky; top:0; z-index:100; background:rgba(10,10,10,0.94); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
+  .headbar{display:flex; align-items:center; justify-content:space-between; padding:18px 24px; gap:20px;}
+  .logo{font-size:19px; font-weight:800; letter-spacing:0.5px; text-transform:uppercase; white-space:nowrap;}
+  .logo span{font-weight:400;}
+
+  .searchbox{
+    flex:1; max-width:420px; position:relative;
+  }
+  .searchbox input{
+    width:100%; background:var(--near-black); border:1px solid var(--line); color:var(--white);
+    font-family:'Montserrat', sans-serif; font-size:13px;
+    padding:11px 40px 11px 16px;
+  }
+  .searchbox input::placeholder{color:var(--grey);}
+  .searchbox input:focus{outline:none; border-color:var(--white);}
+  .searchbox svg{
+    position:absolute; right:14px; top:50%; translate:0 -50%;
+    width:14px; height:14px; fill:none; stroke:var(--grey); stroke-width:2;
+    pointer-events:none;
+  }
+  .search-clear{
+    position:absolute; right:12px; top:50%; translate:0 -50%;
+    background:none; border:none; color:var(--grey); font-size:16px; cursor:pointer; display:none;
+  }
+  .searchbox.has-query .search-clear{display:block;}
+  .searchbox.has-query svg{display:none;}
+
+  .head-cta{background:var(--white); color:var(--black); padding:11px 20px; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; white-space:nowrap; transition:opacity .2s ease;}
+  .head-cta:hover{opacity:0.8;}
+
+  .navbar{border-top:1px solid var(--line); overflow-x:auto;}
+  .navbar-inner{display:flex; gap:28px; padding:14px 24px; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--grey-light); white-space:nowrap;}
+  .navbar-inner button{background:none; border:none; font:inherit; color:inherit; letter-spacing:inherit; cursor:pointer; padding:0;}
+  .navbar-inner button:hover, .navbar-inner button.active{color:var(--white);}
+
+  /* Team sub-filter row */
+  .team-row{
+    border-top:1px solid var(--line); background:var(--near-black);
+    overflow-x:auto; display:none;
+  }
+  .team-row.visible{display:block;}
+  .team-row-inner{display:flex; gap:10px; padding:12px 24px; white-space:nowrap;}
+  .team-chip{
+    font-size:10.5px; letter-spacing:0.5px; text-transform:uppercase; color:var(--grey-light);
+    border:1px solid var(--line); padding:7px 14px; cursor:pointer; background:none; transition:all .2s ease;
+  }
+  .team-chip:hover{border-color:var(--white); color:var(--white);}
+  .team-chip.active{background:var(--white); border-color:var(--white); color:var(--black); font-weight:700;}
+
+  /* Hero */
+  .hero{position:relative; height:min(52vh, 460px); display:flex; align-items:flex-end;
+    background:linear-gradient(180deg, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.85) 100%), repeating-linear-gradient(135deg, #171717 0px, #171717 2px, #0d0d0d 2px, #0d0d0d 26px);
+    border-bottom:1px solid var(--line);}
+  .hero-content{padding:0 24px 48px; max-width:640px;}
+  .hero-eyebrow{font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--grey-light); margin-bottom:16px;}
+  .hero h1{font-size:clamp(30px, 5vw, 50px); font-weight:800; text-transform:uppercase; line-height:1.08; letter-spacing:0.5px;}
+  .hero p{margin-top:16px; color:var(--grey-light); font-size:14px; max-width:440px; line-height:1.7;}
+
+  /* Benefits */
+  .benefits{border-bottom:1px solid var(--line); display:grid; grid-template-columns:repeat(4, 1fr);}
+  .benefit{padding:24px 20px; text-align:center; border-right:1px solid var(--line);}
+  .benefit:last-child{border-right:none;}
+  .benefit h3{font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;}
+  .benefit p{font-size:11px; color:var(--grey); line-height:1.5;}
+
+  /* Results meta */
+  .results-bar{
+    padding:36px 24px 0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+  .results-bar .count{font-size:12px; color:var(--grey);}
+  .results-bar .active-query{font-size:12px; color:var(--white);}
+  .reset-link{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--grey); border-bottom:1px solid var(--grey); cursor:pointer;}
+  .reset-link:hover{color:var(--white); border-color:var(--white);}
+
+  /* Catalog */
+  .catalog{padding:20px 24px 100px;}
+  .cat-section{margin-bottom:60px;}
+  .cat-heading{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:24px; padding-bottom:14px; border-bottom:1px solid var(--line);}
+  .cat-heading h2{font-size:15px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase;}
+  .cat-heading .count{font-size:11px; color:var(--grey);}
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:26px 18px;}
+  .card{display:flex; flex-direction:column;}
+  .card-img{aspect-ratio:1/1; background:var(--card-bg); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; margin-bottom:12px;}
+  .card-monogram{font-size:12px; font-weight:700; letter-spacing:2px; color:#4a4a4a; text-align:center; text-transform:uppercase;}
+  .card-tag{position:absolute; top:10px; left:10px; background:var(--white); color:var(--black); font-size:9px; font-weight:800; letter-spacing:0.5px; text-transform:uppercase; padding:4px 8px;}
+  .card-team{font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--grey); margin-bottom:3px;}
+  .card-name{font-size:13px; font-weight:600; line-height:1.4; margin-bottom:4px;}
+  .card-meta{font-size:11px; color:var(--grey); margin-bottom:10px;}
+  .card-bottom{display:flex; align-items:center; justify-content:space-between; margin-top:auto;}
+  .card-price{font-size:14.5px; font-weight:800;}
+  .card-cta{font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid var(--white); padding-bottom:2px; display:flex; align-items:center; gap:5px;}
+  .card-cta svg{width:11px; height:11px; fill:currentColor;}
+
+  .empty-state{text-align:center; padding:80px 20px; color:var(--grey);}
+  .empty-state p{font-size:13px; margin-top:8px;}
+
+  /* Footer */
+  footer{border-top:1px solid var(--line); padding:60px 24px 32px; background:var(--near-black);}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; padding-bottom:40px; border-bottom:1px solid var(--line);}
+  .footer-brand .logo{margin-bottom:14px;}
+  .footer-brand p{font-size:12px; color:var(--grey); line-height:1.7; max-width:280px;}
+  .footer-col h4{font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px;}
+  .footer-col a, .footer-col p{display:block; font-size:12px; color:var(--grey); margin-bottom:10px;}
+  .footer-col a:hover{color:var(--white);}
+  .footer-bottom{padding-top:22px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:11px; color:var(--grey);}
+
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{transition:none !important;} }
+  button:focus-visible, a:focus-visible, input:focus-visible{outline:1px solid var(--white); outline-offset:2px;}
+
+  @media (max-width:820px){
+    .headbar{flex-wrap:wrap;}
+    .searchbox{order:3; max-width:none; flex-basis:100%;}
+    .benefits{grid-template-columns:repeat(2, 1fr);}
+    .benefit:nth-child(2){border-right:none;}
+    .benefit:nth-child(3), .benefit:nth-child(4){border-top:1px solid var(--line);}
+    .footer-grid{grid-template-columns:1fr 1fr; gap:32px;}
+  }
+  @media (max-width:560px){
+    .benefits{grid-template-columns:1fr;}
+    .benefit{border-right:none; border-bottom:1px solid var(--line);}
+    .footer-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="announce">Envíos a nivel nacional · Paga en 2 quincenas, sin intereses</div>
+
+<header>
+  <div class="headbar">
+    <div class="logo">TIENDA DEPORTIVA <span>SV.</span></div>
+    <div class="searchbox" id="searchbox">
+      <input type="text" id="searchInput" placeholder="Busca tu equipo: Real Madrid, Colombia, Barcelona…" autocomplete="off">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <button class="search-clear" id="searchClear" aria-label="Borrar búsqueda">×</button>
+    </div>
+    <a class="head-cta" href="https://wa.me/573144437752?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20el%20cat%C3%A1logo" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+  <nav class="navbar">
+    <div class="navbar-inner" id="filters">
+      <button class="active" data-filter="all">Todo</button>
+      <button data-filter="selecciones">Selecciones</button>
+      <button data-filter="clubes">Clubes</button>
+      <button data-filter="actuales">Actuales</button>
+      <button data-filter="retro">Retro</button>
+      <button data-filter="hoodies">Hoodies</button>
+      <button data-filter="chaquetas">Chaquetas</button>
+      <button data-filter="entrenamiento">Conjuntos Entrenamiento</button>
+    </div>
+  </nav>
+  <div class="team-row" id="teamRow">
+    <div class="team-row-inner" id="teamRowInner"></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Colección 2026</div>
+    <h1>Tu próxima camiseta<br>está aquí</h1>
+    <p>Busca tu equipo, filtra por categoría y arma tu pedido directo por WhatsApp. Divide tu pago en 2 quincenas y asegura tu pieza hoy.</p>
+  </div>
+</section>
+
+<section class="benefits">
+  <div class="benefit"><h3>Envíos a nivel nacional</h3><p>Entregas rápidas y seguras a cualquier ciudad de Colombia.</p></div>
+  <div class="benefit"><h3>Paga en 2 quincenas</h3><p>Aparta tu pieza con la primera quincena y completas el pago al recibirla.</p></div>
+  <div class="benefit"><h3>Calidad tipo original</h3><p>Prendas importadas con acabados de alta calidad.</p></div>
+  <div class="benefit"><h3>Atención personalizada</h3><p>Te asesoramos con la talla antes de confirmar tu pedido.</p></div>
+</section>
+
+<div class="results-bar wrap" id="resultsBar" style="display:none;">
+  <div class="count" id="resultsCount"></div>
+  <div class="reset-link" id="resetLink">Borrar filtros</div>
+</div>
+
+<main class="catalog wrap" id="catalog"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">TIENDA DEPORTIVA <span>SV.</span></div>
+        <p>Camisetas de selecciones, clubes y colección retro, hoodies, chaquetas y conjuntos de entrenamiento. Envíos a nivel nacional, pago en 2 quincenas.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Categorías</h4>
+        <a href="#catalog">Selecciones</a>
+        <a href="#catalog">Clubes</a>
+        <a href="#catalog">Retro</a>
+        <a href="#catalog">Hoodies</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contáctanos</h4>
+        <a href="https://wa.me/573144437752" target="_blank" rel="noopener">+57 314 443 7752</a>
+        <p>Villavicencio, Colombia</p>
+      </div>
+      <div class="footer-col">
+        <h4>Síguenos</h4>
+        <a href="https://instagram.com/tiendadeportivasv_" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.tiktok.com/@tiendadeportivasv_" target="_blank" rel="noopener">TikTok</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Tienda Deportiva SV. — 2026. Todos los derechos reservados.</span>
+      <span>Catálogo bajo pedido</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   DATOS DEL CATÁLOGO
+   Cada producto necesita:
+   name, team (para buscador y subcategoría), category
+   (selecciones | clubes | retro | actuales | hoodies | chaquetas | entrenamiento),
+   meta (talla/versión), price, tag (opcional: "Nuevo", "Player", "Retro"),
+   image (opcional: "images/nombre-archivo.jpg" — si no lo pones, se muestra un
+   placeholder con las iniciales del producto. Sube tus fotos a una carpeta
+   llamada "images" al lado de este archivo y escribe aquí la ruta.)
+   ============================================================ */
+const PRODUCTS = [
+  { name: "Colombia Titular 2026", team: "Colombia", category: "selecciones", meta: "Versión Fan · S a XL", price: 210000, tag: "Nuevo", image: "" },
+  { name: "Colombia Titular 2026 Player", team: "Colombia", category: "actuales", meta: "Versión Jugador · S a XL", price: 260000, tag: "Player" },
+  { name: "Argentina Titular 2026", team: "Argentina", category: "selecciones", meta: "Versión Jugador · S a XL", price: 260000, tag: "Player" },
+  { name: "Brasil Visitante 2026", team: "Brasil", category: "selecciones", meta: "Versión Fan · S a XL", price: 210000 },
+  { name: "Francia Titular 2026", team: "Francia", category: "selecciones", meta: "Versión Jugador · S a XL", price: 260000, tag: "Player" },
+
+  { name: "Real Madrid Titular 25/26", team: "Real Madrid", category: "clubes", meta: "Versión Fan · S a XL", price: 220000 },
+  { name: "Real Madrid Titular 25/26 Player", team: "Real Madrid", category: "actuales", meta: "Versión Jugador · S a XL", price: 270000, tag: "Player" },
+  { name: "Barcelona Titular 25/26", team: "Barcelona", category: "clubes", meta: "Versión Jugador · S a XL", price: 270000, tag: "Player" },
+  { name: "Manchester City Local 25/26", team: "Manchester City", category: "clubes", meta: "Versión Fan · S a XL", price: 220000 },
+  { name: "River Plate Titular 25/26", team: "River Plate", category: "clubes", meta: "Versión Fan · S a XL", price: 210000 },
+
+  { name: "Brasil 1998 Titular", team: "Brasil", category: "retro", meta: "Edición retro · S a XL", price: 240000, tag: "Retro" },
+  { name: "Colombia 1990 Titular", team: "Colombia", category: "retro", meta: "Edición retro · S a XL", price: 240000, tag: "Retro" },
+  { name: "Argentina 1986 Titular", team: "Argentina", category: "retro", meta: "Edición retro · S a XL", price: 250000, tag: "Retro" },
+  { name: "Milan 1994 Titular", team: "Milan", category: "retro", meta: "Edición retro · S a XL", price: 250000, tag: "Retro" },
+
+  { name: "Hoodie Premium Negro", team: "SV", category: "hoodies", meta: "Unisex · S a XL", price: 180000 },
+  { name: "Hoodie Premium Gris", team: "SV", category: "hoodies", meta: "Unisex · S a XL", price: 180000 },
+  { name: "Hoodie Real Madrid", team: "Real Madrid", category: "hoodies", meta: "Unisex · S a XL", price: 195000 },
+
+  { name: "Chaqueta Rompevientos Negra", team: "SV", category: "chaquetas", meta: "Unisex · S a XL", price: 230000 },
+  { name: "Chaqueta Colombia Selección", team: "Colombia", category: "chaquetas", meta: "Unisex · S a XL", price: 240000 },
+  { name: "Chaqueta Año Nuevo Chino", team: "SV", category: "chaquetas", meta: "Unisex · S a XL", price: 325000, tag: "Nuevo" },
+
+  { name: "Conjunto Entrenamiento Colombia", team: "Colombia", category: "entrenamiento", meta: "Camiseta + Short · S a XL", price: 195000 },
+  { name: "Conjunto Entrenamiento Real Madrid", team: "Real Madrid", category: "entrenamiento", meta: "Camiseta + Short · S a XL", price: 210000 },
+  { name: "Conjunto Entrenamiento Barcelona", team: "Barcelona", category: "entrenamiento", meta: "Camiseta + Short · S a XL", price: 210000 },
+];
+
+const WHATSAPP_NUMBER = "573144437752";
+const CATEGORY_LABELS = {
+  selecciones: "Selecciones", clubes: "Clubes", retro: "Retro", actuales: "Actuales",
+  hoodies: "Hoodies", chaquetas: "Chaquetas", entrenamiento: "Conjuntos Entrenamiento"
+};
+const CATEGORY_ORDER = ["selecciones","clubes","actuales","retro","hoodies","chaquetas","entrenamiento"];
+
+let state = { category: "all", team: "all", query: "" };
+
+function normalize(s){
+  return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+function monogram(name){ return name.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase(); }
+function money(n){ return "$" + n.toLocaleString("es-CO"); }
+function whatsappLink(p){
+  const msg = `Hola, quiero encargar: ${p.name} (${p.meta}) — ${money(p.price)}`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
+
+function matches(p){
+  if(state.category !== "all" && p.category !== state.category) return false;
+  if(state.team !== "all" && p.team !== state.team) return false;
+  if(state.query){
+    const q = normalize(state.query);
+    if(!normalize(p.name).includes(q) && !normalize(p.team).includes(q)) return false;
+  }
+  return true;
+}
+
+function cardHTML(p){
+  const imgContent = p.image
+    ? `<img src="${p.image}" alt="${p.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">`
+    : `<div class="card-monogram">${monogram(p.name)}</div>`;
+  return `
+    <article class="card">
+      <div class="card-img">
+        ${p.tag ? `<span class="card-tag">${p.tag}</span>` : ""}
+        ${imgContent}
+      </div>
+      <div class="card-team">${p.team}</div>
+      <div class="card-name">${p.name}</div>
+      <div class="card-meta">${p.meta}</div>
+      <div class="card-bottom">
+        <div class="card-price">${money(p.price)}</div>
+        <a class="card-cta" href="${whatsappLink(p)}" target="_blank" rel="noopener">
+          Encargar
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.06-1.33A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+        </a>
+      </div>
+    </article>`;
+}
+
+function renderTeamRow(){
+  const row = document.getElementById("teamRow");
+  const inner = document.getElementById("teamRowInner");
+
+  if(state.category === "all"){
+    row.classList.remove("visible");
+    inner.innerHTML = "";
+    return;
+  }
+
+  const teams = [...new Set(PRODUCTS.filter(p => p.category === state.category).map(p => p.team))].sort();
+  if(teams.length <= 1){
+    row.classList.remove("visible");
+    inner.innerHTML = "";
+    return;
+  }
+
+  row.classList.add("visible");
+  inner.innerHTML = `
+    <button class="team-chip ${state.team === 'all' ? 'active' : ''}" data-team="all">Todos los equipos</button>
+    ${teams.map(t => `<button class="team-chip ${state.team === t ? 'active' : ''}" data-team="${t}">${t}</button>`).join("")}
+  `;
+}
+
+function renderResultsBar(filtered){
+  const bar = document.getElementById("resultsBar");
+  const hasActiveFilter = state.category !== "all" || state.team !== "all" || state.query;
+  bar.style.display = hasActiveFilter ? "flex" : "none";
+  document.getElementById("resultsCount").textContent = `${filtered.length} resultado${filtered.length === 1 ? "" : "s"}`;
+}
+
+function render(){
+  const filtered = PRODUCTS.filter(matches);
+  renderTeamRow();
+  renderResultsBar(filtered);
+
+  const groups = {};
+  filtered.forEach(p => (groups[p.category] = groups[p.category] || []).push(p));
+
+  const html = CATEGORY_ORDER
+    .filter(cat => groups[cat] && groups[cat].length)
+    .map(cat => `
+      <section class="cat-section">
+        <div class="cat-heading">
+          <h2>${CATEGORY_LABELS[cat]}</h2>
+          <span class="count">${groups[cat].length} piezas</span>
+        </div>
+        <div class="grid">${groups[cat].map(cardHTML).join("")}</div>
+      </section>`).join("");
+
+  document.getElementById("catalog").innerHTML = html || `
+    <div class="empty-state">
+      <h3 style="font-size:14px; letter-spacing:1px; text-transform:uppercase;">Sin resultados</h3>
+      <p>No encontramos piezas que coincidan con tu búsqueda. Prueba con otro nombre de equipo.</p>
+    </div>`;
+}
+
+// Category tabs
+document.getElementById("filters").addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if(!btn) return;
+  document.querySelectorAll("#filters button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  state.category = btn.dataset.filter;
+  state.team = "all";
+  render();
+});
+
+// Team chips (delegated, row is re-rendered)
+document.getElementById("teamRowInner").addEventListener("click", (e) => {
+  const chip = e.target.closest(".team-chip");
+  if(!chip) return;
+  state.team = chip.dataset.team;
+  render();
+});
+
+// Search
+const searchInput = document.getElementById("searchInput");
+const searchbox = document.getElementById("searchbox");
+searchInput.addEventListener("input", (e) => {
+  state.query = e.target.value;
+  searchbox.classList.toggle("has-query", !!state.query);
+  render();
+});
+document.getElementById("searchClear").addEventListener("click", () => {
+  state.query = "";
+  searchInput.value = "";
+  searchbox.classList.remove("has-query");
+  render();
+});
+
+// Reset all filters
+document.getElementById("resetLink").addEventListener("click", () => {
+  state = { category: "all", team: "all", query: "" };
+  searchInput.value = "";
+  searchbox.classList.remove("has-query");
+  document.querySelectorAll("#filters button").forEach(b => b.classList.remove("active"));
+  document.querySelector('#filters button[data-filter="all"]').classList.add("active");
+  render();
+});
+
+render();
+</script>
+
+</body>
+</html>
